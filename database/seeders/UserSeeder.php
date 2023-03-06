@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::insert([
             'name' => 'Administrator',
             'username' => 'administrator',
-            'email' => 'administrator',
+            'email' => 'administrator@lelangin.store',
             'email_verified_at' => date('Y-m-d H:i:s'),
             'password' => Hash::make('12345678'),
             'level' => '0',

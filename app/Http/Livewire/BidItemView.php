@@ -8,6 +8,7 @@ class BidItemView extends Component
 {
     public function render()
     {
-        return view('livewire.bid-item-view')->extends('layouts.livewire');
+        return view('livewire.bid-item-view')
+            ->extends('layouts.livewire');
     }
 }

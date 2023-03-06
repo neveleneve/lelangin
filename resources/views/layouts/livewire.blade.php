@@ -66,6 +66,16 @@
                                         <i class="fa fa-user"></i>
                                         Beranda
                                     </a>
+                                    @level('pelelang')
+                                        <a href="{{ route('landing-page') }}" class="dropdown-item">
+                                            <i class="fa-solid fa-list"></i>
+                                            Daftar Lelang
+                                        </a>
+                                        <a href="{{ route('landing-page') }}" class="dropdown-item">
+                                            <i class="fa fa-boxes-stacked"></i>
+                                            Daftar Barang
+                                        </a>
+                                    @endlevel
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
