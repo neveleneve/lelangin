@@ -26,6 +26,12 @@ trait UserUtilities
     }
   }
 
+  public function getUsername($id)
+  {
+    $username = User::find($id);
+    return $username['username'];
+  }
+
   public function kMeansGenerateData($userid)
   {
     # code...

@@ -34,12 +34,15 @@
     @push('page_name')
         Item Lelang
     @endpush
+    {{-- <pre>
+        {{ dump($datalelang) }}
+    </pre> --}}
     <div class="row">
         <div class="col-12">
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-dark" href="{{ route('landing-page') }}">Beranda</a></li>
-                    <li class="breadcrumb-item active">Nama Item - Kode Lot</li>
+                    <li class="breadcrumb-item active">{{ $datalelang->items->name }} - {{ $kodelot }}</li>
                 </ol>
             </nav>
         </div>
@@ -84,7 +87,7 @@
                         <div class="col-12 col-lg-6">
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <h2 class="fw-bold">Casio General MTPV004L1AUDF</h2>
+                                    <h2 class="fw-bold">{{ $datalelang->items->name }}</h2>
                                     <span class="badge bg-danger">Sudah Berakhir</span>
                                 </div>
                                 <div class="col-12">

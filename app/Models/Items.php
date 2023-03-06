@@ -9,8 +9,13 @@ class Items extends Model
 {
     use HasFactory;
 
-    public function bidjoins()
+    public function bidlots()
     {
         return $this->hasMany(BidLot::class, 'id', 'item_id');
+    }
+
+    public function users()
+    {
+        $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

@@ -52,7 +52,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a class="text-dark text-decoration-none"
-                                            href="{{ route('bid-item-view', ['id' => $item->kode_lot]) }}">
+                                            href="{{ route('bid-item-view', ['kode' => $item->kode_lot, 'id' => Crypt::encrypt($item->id)]) }}">
                                             {{ $item->items['name'] }}
                                         </a>
                                     </h5>
@@ -93,13 +93,18 @@
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a class="text-dark text-decoration-none"
-                                            href="{{ route('bid-item-view', ['id' => $item->kode_lot]) }}">
+                                            href="{{ route('bid-item-view', ['kode' => $item->kode_lot, 'id' => Crypt::encrypt($item->id)]) }}">
                                             {{ $item->items['name'] }}
                                         </a>
                                     </h5>
                                     <p class="card-text">
-                                        Penawaran Tertinggi : Rp
-                                        {{ number_format($item->bids[0]->penawaran, 0, ',', '.') }}
+                                        @if (isset($item->bids[0]->penawaran))
+                                            Tawaran Tertinggi : Rp
+                                            {{ number_format($item->bids[0]->penawaran, 0, ',', '.') }}
+                                        @else
+                                            Harga Awal : Rp
+                                            {{ number_format($item->harga_awal, 0, ',', '.') }}
+                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -117,8 +122,4 @@
         </div>
         <hr class="mb-3">
     @endif
-    <pre>
-        {{-- {{ $timeoutbid }} --}}
-        {{-- {{ print_r($timeoutbid) }} --}}
-    </pre>
 </div>
