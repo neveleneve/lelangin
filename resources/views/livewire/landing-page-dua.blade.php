@@ -91,8 +91,16 @@
                                     <div class="mask" style="background-color: rgba(0, 0, 0, 0.1)"></div>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Nilai Tertinggi : Rp 1.000.000</p>
+                                    <h5 class="card-title">
+                                        <a class="text-dark text-decoration-none"
+                                            href="{{ route('bid-item-view', ['id' => $item->kode_lot]) }}">
+                                            {{ $item->items['name'] }}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text">
+                                        Penawaran Tertinggi : Rp
+                                        {{ number_format($item->bids[0]->penawaran, 0, ',', '.') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -110,6 +118,7 @@
         <hr class="mb-3">
     @endif
     <pre>
-        {{ $newestbid }}
+        {{-- {{ $timeoutbid }} --}}
+        {{-- {{ print_r($timeoutbid) }} --}}
     </pre>
 </div>

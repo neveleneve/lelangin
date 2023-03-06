@@ -13,4 +13,9 @@ class BidLot extends Model
     {
         return $this->belongsTo(Items::class, 'item_id', 'id');
     }
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class, 'bid_lot_id', 'id')->orderBy('penawaran', 'DESC');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bid;
 use Illuminate\Database\Seeder;
 
 class BidSeeder extends Seeder
@@ -13,6 +14,21 @@ class BidSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Bid::insert([
+            [
+                'bid_lot_id' => 1,
+                'user_penawar_id' => 3,
+                'penawaran' => 130000,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'bid_lot_id' => 1,
+                'user_penawar_id' => 3,
+                'penawaran' => 150000,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+        ]);
     }
 }

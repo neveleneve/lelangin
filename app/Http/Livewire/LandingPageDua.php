@@ -30,7 +30,7 @@ class LandingPageDua extends Component
             ->take(4)
             ->get();
 
-        $this->timeoutbid = BidLot::with(['items'])
+        $this->timeoutbid = BidLot::with(['items', 'bids'])
             ->where('waktu_mulai', '<=', strtotime(date('Y-m-d H:i:s')))
             ->where('waktu_selesai', '>', strtotime(date('Y-m-d H:i:s')))
             ->orderBy('waktu_selesai', 'ASC')
