@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\BidLot;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,5 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call(UserSeeder::class);
+        $this->call(ItemsSeeder::class);
+        $this->call(BidLotSeeder::class);
     }
 }
