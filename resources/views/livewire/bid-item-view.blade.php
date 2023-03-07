@@ -88,29 +88,49 @@
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <h2 class="fw-bold">{{ $datalelang->items->name }}</h2>
-                                    <span class="badge bg-danger">Sudah Berakhir</span>
+                                    @if (strtotime(date('Y-m-d H:i:s')) < $datalelang->waktu_mulai)
+                                        <span class="badge bg-warning">Belum Dimulai</span>
+                                    @elseif(strtotime(date('Y-m-d H:i:s')) > $datalelang->waktu_selesai)
+                                        <span class="badge bg-danger">Sudah Selesai</span>
+                                    @else
+                                        <span class="badge bg-success">Sedang Berlangsung</span>
+                                    @endif
                                 </div>
                                 <div class="col-12">
-                                    by <a class="text-dark fw-bold" href="#">juragancasio</a>
+                                    by <a class="text-dark fw-bold"
+                                        href="{{ route('profile', ['id' => $bidusername]) }}">{{ $bidusername }}
+                                    </a>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <h5 class="fw-bold">Harga Mulai</h5>
-                                    <h6 class="fw-bold">Rp. 750.000</h6>
+                                    @if (count($datalelang->bids) == 0)
+                                        <h5 class="fw-bold">Harga Mulai</h5>
+                                        <h6 class="fw-bold">
+                                            Rp {{ number_format($datalelang->harga_awal, 0, ',', '.') }}
+                                        </h6>
+                                    @else
+                                        <h5 class="fw-bold">Tawaran Tertinggi</h5>
+                                        <h6 class="fw-bold">
+                                            Rp {{ number_format($datalelang->bids[0]->penawaran, 0, ',', '.') }}
+                                        </h6>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <h5 class="fw-bold">Tanggal Mulai Lelang</h5>
-                                    <h6 class="fw-bold">15 September 2022, Pukul 12:00:00
+                                    <h6 class="fw-bold">
+                                        {{ $this->dateConvertInt($datalelang->waktu_mulai) }}
                                     </h6>
+
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
                                     <h5 class="fw-bold">Tanggal Tutup Lelang</h5>
-                                    <h6 class="fw-bold">18 September 2022, Pukul 21:00:00
+                                    <h6 class="fw-bold">
+                                        {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
                                     </h6>
                                 </div>
                             </div>
@@ -121,13 +141,19 @@
                     <div class="col-12 col-lg-6 offset-lg-6">
                         <div class="d-grid gap-2">
                             @guest
-                                <a class="btn btn-outline-success fw-bold" href="#">
+                                <a class="btn btn-outline-success fw-bold" href="{{ route('login') }}">
                                     Mau ikut lelang? Login sebagai peserta lelang disini!
                                 </a>
                             @else
-                                <button class="btn btn-outline-success fw-bold">
-                                    Ikuti Lelang Ini!
-                                </button>
+                                @level('pelelang')
+                                    <button class="btn btn-outline-success fw-bold">
+                                        Login sebagai akun penawar untuk ikut lelang ini!
+                                    </button>
+                                @elselevel('penawar')
+                                    <button class="btn btn-outline-success fw-bold">
+                                        Ikuti Lelang Ini!
+                                    </button>
+                                @endlevel
                             @endguest
                         </div>
                     </div>
@@ -142,21 +168,32 @@
                         <thead class="table-primary">
                             <tr class="fw-bold">
                                 <th class="fw-bold">No</th>
-                                <th class="fw-bold">Username</th>
+                                <th class="fw-bold">Nama Penawar</th>
                                 <th class="fw-bold">Penawaran</th>
                                 <th class="fw-bold">Waktu</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="4">
-                                    <h2 class="text-center fw-bold">Belum ada penawaran</h2>
-                                </td>
-                            </tr>
+                            @forelse ($datalelang->bids as $item)
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $this->cencorName($this->getNames($item->user_penawar_id)) }}</td>
+                                    <td>Rp {{ number_format($item->penawaran, 0, ',', '.') }}</td>
+                                    <td>{{ $this->dateConvert($item->created_at) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4">
+                                        <h2 class="text-center fw-bold">Belum ada penawaran</h2>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    @level('penawar')
+    @endlevel
 </div>

@@ -32,6 +32,19 @@ trait UserUtilities
     return $username['username'];
   }
 
+  public function getNames($id)
+  {
+    $username = User::find($id);
+    return $username['name'];
+  }
+
+  public function cencorName($username)
+  {
+    $count = strlen($username) - (strlen($username) - (strlen($username) - 2));
+    $output = substr_replace($username, str_repeat('*', $count), 2, $count);
+    return $output;
+  }
+
   public function kMeansGenerateData($userid)
   {
     # code...

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\BidLot;
+use App\Traits\AppUtilities;
 use Livewire\Component;
 use App\Traits\UserUtilities;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class LandingPageDua extends Component
 {
     use UserUtilities;
+    use AppUtilities;
     public $lastactive = null;
     public $newestbid = [];
     public $timeoutbid = [];

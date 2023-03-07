@@ -24,9 +24,9 @@ class BidSeeder extends Seeder
             ],
             [
                 'bid_lot_id' => 1,
-                'user_penawar_id' => 3,
+                'user_penawar_id' => 4,
                 'penawaran' => 150000,
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s', strtotime('+3 minute')),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
         ]);

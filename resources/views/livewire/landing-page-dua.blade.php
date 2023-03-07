@@ -88,7 +88,10 @@
                             <div class="card">
                                 <div class="ratio ratio-1x1 bg-image">
                                     <img src="{{ asset('images/items/jam.jpg') }}" class="card-img-top img-fluid">
-                                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.1)"></div>
+                                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.1)">
+                                        <i class="fa-solid fa-xl fa-circle-exclamation" {{-- title="Berakhir pada {{ $this-> }}" --}}>
+                                        </i>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">

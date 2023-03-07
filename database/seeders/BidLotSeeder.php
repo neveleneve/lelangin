@@ -29,7 +29,7 @@ class BidLotSeeder extends Seeder
                 'kode_lot' => $this->randomString(),
                 'harga_awal' => 200000,
                 'waktu_mulai' =>  strtotime(date('Y-m-d H') . ':00:00'),
-                'waktu_selesai' => strtotime(date('Y-m-d H', strtotime('+7 hour')) . ':00:00'),
+                'waktu_selesai' => strtotime(date('Y-m-d H', strtotime('+8 hour')) . ':00:00'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
