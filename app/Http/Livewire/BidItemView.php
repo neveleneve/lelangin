@@ -31,5 +31,25 @@ class BidItemView extends Component
         $this->datalelang = BidLot::with(['items', 'bids'])
             ->find($this->idlot);
         $this->bidusername = $this->getUsername($this->datalelang->items->user_id);
+
+        $this->updateLastActive();
+    }
+
+    public function callSnap($idlot, $iduser)
+    {
+        $datalot = BidLot::find($idlot);
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'Bid-Join-' . $datalot->kode_lot . '-' . rand(100000000, 999999999),
+                'gross_amount' => 50000,
+            ],
+            'customer_details' => [
+                'first_name' => 'budi',
+                'last_name' => 'pratama',
+                'email' => 'budi.pra@example.com',
+                'phone' => '08111222333',
+            ],
+        ];
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
     }
 }

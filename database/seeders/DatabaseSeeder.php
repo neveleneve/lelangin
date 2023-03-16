@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(ItemsSeeder::class);
         $this->call(BidLotSeeder::class);
+        $this->call(BidLotJoinSeeder::class);
         $this->call(BidSeeder::class);
     }
 }

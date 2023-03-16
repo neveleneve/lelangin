@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\BidLotJoin;
+
 trait AppUtilities
 {
   public function dateConvertInt($dates)
@@ -109,5 +111,25 @@ trait AppUtilities
   public function minuteConvert($tglselesai, $tanggalnow)
   {
     # code...
+  }
+  public function checkJoinBid($idlot, $iduser)
+  {
+    $data = BidLotJoin::where([
+      'bid_lot_id' => $idlot,
+      'user_penawar_id' => $iduser,
+    ])
+      ->count();
+    if ($data > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  protected function initPaymentGateway()
+  {
+    \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+    \Midtrans\Config::$isProduction = false;
+    \Midtrans\Config::$isSanitized = true;
+    \Midtrans\Config::$is3ds = true;
   }
 }

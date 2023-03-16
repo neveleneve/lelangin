@@ -34,9 +34,6 @@
     @push('page_name')
         Item Lelang
     @endpush
-    {{-- <pre>
-        {{ dump($datalelang) }}
-    </pre> --}}
     <div class="row">
         <div class="col-12">
             <nav>
@@ -97,41 +94,62 @@
                                     @endif
                                 </div>
                                 <div class="col-12">
-                                    by <a class="text-dark fw-bold"
+                                    oleh <a class="text-dark fw-bold"
                                         href="{{ route('profile', ['id' => $bidusername]) }}">{{ $bidusername }}
                                     </a>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    @if (count($datalelang->bids) == 0)
-                                        <h5 class="fw-bold">Harga Mulai</h5>
-                                        <h6 class="fw-bold">
-                                            Rp {{ number_format($datalelang->harga_awal, 0, ',', '.') }}
-                                        </h6>
-                                    @else
-                                        <h5 class="fw-bold">Tawaran Tertinggi</h5>
-                                        <h6 class="fw-bold">
-                                            Rp {{ number_format($datalelang->bids[0]->penawaran, 0, ',', '.') }}
-                                        </h6>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h5 class="fw-bold">Tanggal Mulai Lelang</h5>
-                                    <h6 class="fw-bold">
-                                        {{ $this->dateConvertInt($datalelang->waktu_mulai) }}
-                                    </h6>
-
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <h5 class="fw-bold">Tanggal Tutup Lelang</h5>
-                                    <h6 class="fw-bold">
-                                        {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
-                                    </h6>
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <h6 class="fw-bold">Harga Mulai</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 class="fw-bold">
+                                                        Rp {{ number_format($datalelang->harga_awal, 0, ',', '.') }}
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6 class="fw-bold">Tawaran Tertinggi</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 class="fw-bold">
+                                                        @if (count($datalelang->bids) != 0)
+                                                            Rp
+                                                            {{ number_format($datalelang->bids[0]->penawaran, 0, ',', '.') }}
+                                                        @else
+                                                            (Belum ada)
+                                                        @endif
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6 class="fw-bold">Tanggal Mulai Lelang</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 class="fw-bold">
+                                                        {{ $this->dateConvertInt($datalelang->waktu_mulai) }}
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6 class="fw-bold">Tanggal Tutup Lelang</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 class="fw-bold">
+                                                        {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -150,9 +168,15 @@
                                         Login sebagai akun penawar untuk ikut lelang ini!
                                     </button>
                                 @elselevel('penawar')
-                                    <button class="btn btn-outline-success fw-bold">
-                                        Ikuti Lelang Ini!
-                                    </button>
+                                    @if ($this->checkJoinBid($idlot, Auth::user()->id))
+                                        <button class="btn btn-outline-success fw-bold">
+                                            Masukkan Penawaran
+                                        </button>
+                                    @else
+                                        <button class="btn btn-outline-success fw-bold">
+                                            Ikuti Lelang Ini!
+                                        </button>
+                                    @endif
                                 @endlevel
                             @endguest
                         </div>
@@ -177,7 +201,15 @@
                             @forelse ($datalelang->bids as $item)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    <td>{{ $this->cencorName($this->getNames($item->user_penawar_id)) }}</td>
+                                    @guest
+                                        <td>{{ $this->cencorName($this->getNames($item->user_penawar_id)) }}</td>
+                                    @else
+                                        @if (Auth::user()->id == $item->user_penawar_id)
+                                            <td class="fw-bold">{{ $this->getNames($item->user_penawar_id) }}</td>
+                                        @else
+                                            <td>{{ $this->cencorName($this->getNames($item->user_penawar_id)) }}</td>
+                                        @endif
+                                    @endguest
                                     <td>Rp {{ number_format($item->penawaran, 0, ',', '.') }}</td>
                                     <td>{{ $this->dateConvert($item->created_at) }}</td>
                                 </tr>
