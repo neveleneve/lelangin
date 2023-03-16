@@ -2,6 +2,26 @@
     @push('js')
         <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
             data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+        <script>
+            Livewire.on('snap', (snapToken, idlot, iduser) => {
+                window.snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        Livewire.emit('succeedPayment', idlot, iduser);
+                        alert(
+                            "Pembayaran ikut lelang berhasil! Sekarang kamu bisa ikut penawaran harga pada item ini!"
+                        );
+                    },
+                    onPending: function(result) {
+                        alert("Sedang nunggu pembayaranmu buat ikut lelang ini!");
+                        console.log(result);
+                    },
+                    onError: function(result) {
+                        alert("Yaaah, pembayarannya gagal! Kamu bisa ulangi lagi untuk ikut lelang ini!");
+                        console.log(result);
+                    }
+                });
+            });
+        </script>
     @endpush
     @push('css')
         <style>
@@ -50,7 +70,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-lg-6 mb-3 mb-md-0">
-                            <div id="carouselBasicExample" class="carousel slide" data-bs-ride="carousel">
+                            <div wire:ignore.self id="carouselBasicExample" class="carousel slide"
+                                data-bs-ride="carousel">
                                 <div class="carousel-indicators">
                                     <button type="button" data-bs-target="#carouselBasicExample" data-bs-slide-to="0"
                                         class="active" aria-current="true"></button>
@@ -169,15 +190,22 @@
                                     </button>
                                 @elselevel('penawar')
                                     @if ($this->checkJoinBid($idlot, Auth::user()->id))
-                                        <button class="btn btn-outline-success fw-bold">
+                                        <button class="btn btn-outline-success fw-bold" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
                                             Masukkan Penawaran
                                         </button>
                                     @else
-                                        <button class="btn btn-outline-success fw-bold">
+                                        <button class="btn btn-outline-success fw-bold"
+                                            wire:click='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'
+                                            wire:loading.remove>
                                             Ikuti Lelang Ini!
                                         </button>
                                     @endif
                                 @endlevel
+                                <button class="btn btn-outline-success fw-bold" wire:loading
+                                    wire:target='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'>
+                                    <i class="fa-solid fa-spinner fa-spin"></i>
+                                </button>
                             @endguest
                         </div>
                     </div>
@@ -227,5 +255,46 @@
         </div>
     </div>
     @level('penawar')
+        @if ($this->checkJoinBid($idlot, Auth::user()->id))
+            <div wire:ignore.self class="modal fade" id="exampleModal" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group mb-3">
+                                @if (count($datalelang->bids) != 0)
+                                    <button class="btn btn-outline-danger" type="button"
+                                        wire:click='decrementPenawaran({{ $datalelang->bids[0]->penawaran }})'>
+                                        -
+                                    </button>
+                                @else
+                                    <button class="btn btn-outline-danger" type="button"
+                                        wire:click='decrementPenawaran({{ $datalelang->harga_awal }})'>
+                                        -
+                                    </button>
+                                @endif
+                                <input type="text" class="form-control text-center" wire:model='penawaranuser'>
+                                <button class="btn btn-outline-success" type="button" wire:click='incrementPenawaran'>
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Tutup
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                Masukkan Penawaran
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     @endlevel
 </div>
