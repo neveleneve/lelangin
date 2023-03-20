@@ -29,5 +29,5 @@ Route::middleware(['pelelang'])->group(function () {
   // Route::get('barang', App\Http\Livewire\LandingPage::class)->name('pelelang.barang');
 });
 Route::middleware(['penawar'])->group(function () {
-  // 
+  Route::get('penawaran', App\Http\Livewire\DaftarPenawaran::class)->name('penawar.penawaran');
 });

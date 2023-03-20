@@ -76,6 +76,12 @@
                                             Daftar Barang
                                         </a>
                                     @endlevel
+                                    @level('penawar')
+                                        <a href="{{ route('penawar.penawaran') }}" class="dropdown-item">
+                                            <i class="fa fa-boxes-stacked"></i>
+                                            Daftar Penawaran
+                                        </a>
+                                    @endlevel
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -97,10 +103,9 @@
             @stack('blade')
             @yield('content')
         </main>
-        <div class="container-fluid">
+        <div class="container-fluid bg-light footer navbar-fixed-bottom ">
             <footer class="d-flex flex-wrap justify-content-between align-items-center p-3 my-1 my-md-4 border-top">
                 <p class="col-md-4 mb-0 text-muted d-none d-md-inline">© 2023 PT. Karya Anak Bangsa, Inc</p>
-
                 <a href="{{ route('landing-page') }}"
                     class="col-12 col-md-4 d-flex align-items-center justify-content-center mb-0 me-md-auto link-dark text-decoration-none">
                     <img height="30" src="{{ asset('images/logo/nav.png') }}">

@@ -20,7 +20,7 @@ class LandingPageDua extends Component
     public function render()
     {
         return view('livewire.landing-page-dua')
-            ->extends('layouts.livewire');
+            ->extends('layouts.test');
     }
 
     public function mount()

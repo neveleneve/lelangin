@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.test')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-2">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">

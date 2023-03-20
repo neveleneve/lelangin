@@ -129,7 +129,7 @@
                                                     <h6 class="fw-bold">Harga Mulai</h6>
                                                 </td>
                                                 <td>
-                                                    <h6 class="fw-bold">
+                                                    <h6>
                                                         Rp {{ number_format($datalelang->harga_awal, 0, ',', '.') }}
                                                     </h6>
                                                 </td>
@@ -139,7 +139,7 @@
                                                     <h6 class="fw-bold">Tawaran Tertinggi</h6>
                                                 </td>
                                                 <td>
-                                                    <h6 class="fw-bold">
+                                                    <h6>
                                                         @if (count($datalelang->bids) != 0)
                                                             Rp
                                                             {{ number_format($datalelang->bids[0]->penawaran, 0, ',', '.') }}
@@ -154,7 +154,7 @@
                                                     <h6 class="fw-bold">Tanggal Mulai Lelang</h6>
                                                 </td>
                                                 <td>
-                                                    <h6 class="fw-bold">
+                                                    <h6>
                                                         {{ $this->dateConvertInt($datalelang->waktu_mulai) }}
                                                     </h6>
                                                 </td>
@@ -164,7 +164,7 @@
                                                     <h6 class="fw-bold">Tanggal Tutup Lelang</h6>
                                                 </td>
                                                 <td>
-                                                    <h6 class="fw-bold">
+                                                    <h6>
                                                         {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
                                                     </h6>
                                                 </td>
@@ -184,28 +184,30 @@
                                     Mau ikut lelang? Login sebagai peserta lelang disini!
                                 </a>
                             @else
-                                @level('pelelang')
-                                    <button class="btn btn-outline-success fw-bold">
-                                        Login sebagai akun penawar untuk ikut lelang ini!
+                                @if (strtotime(date('Y-m-d H:i:s')) < $datalelang->waktu_selesai)
+                                    @level('pelelang')
+                                        <button class="btn btn-outline-success fw-bold">
+                                            Login sebagai akun penawar untuk ikut lelang ini!
+                                        </button>
+                                    @elselevel('penawar')
+                                        @if ($this->checkJoinBid($idlot, Auth::user()->id))
+                                            <button class="btn btn-outline-success fw-bold" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">
+                                                Masukkan Penawaran
+                                            </button>
+                                        @else
+                                            <button class="btn btn-outline-success fw-bold"
+                                                wire:click='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'
+                                                wire:loading.remove>
+                                                Ikuti Lelang Ini!
+                                            </button>
+                                        @endif
+                                    @endlevel
+                                    <button class="btn btn-outline-success fw-bold" wire:loading
+                                        wire:target='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'>
+                                        <i class="fa-solid fa-spinner fa-spin"></i>
                                     </button>
-                                @elselevel('penawar')
-                                    @if ($this->checkJoinBid($idlot, Auth::user()->id))
-                                        <button class="btn btn-outline-success fw-bold" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">
-                                            Masukkan Penawaran
-                                        </button>
-                                    @else
-                                        <button class="btn btn-outline-success fw-bold"
-                                            wire:click='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'
-                                            wire:loading.remove>
-                                            Ikuti Lelang Ini!
-                                        </button>
-                                    @endif
-                                @endlevel
-                                <button class="btn btn-outline-success fw-bold" wire:loading
-                                    wire:target='callSnap({{ $datalelang->id }},{{ Auth::user()->id }})'>
-                                    <i class="fa-solid fa-spinner fa-spin"></i>
-                                </button>
+                                @endif
                             @endguest
                         </div>
                     </div>
@@ -256,8 +258,8 @@
     </div>
     @level('penawar')
         @if ($this->checkJoinBid($idlot, Auth::user()->id))
-            <div wire:ignore.self class="modal fade" id="exampleModal" tabindex="-1"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div wire:ignore.self class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -288,7 +290,8 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 Tutup
                             </button>
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                                wire:click='inputPenawaran'>
                                 Masukkan Penawaran
                             </button>
                         </div>
