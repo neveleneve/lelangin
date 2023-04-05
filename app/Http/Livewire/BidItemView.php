@@ -8,6 +8,7 @@ use App\Models\BidLotJoin;
 use App\Models\User;
 use App\Traits\AppUtilities;
 use App\Traits\UserUtilities;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Route;
@@ -50,26 +51,6 @@ class BidItemView extends Component
         }
     }
 
-    public function callSnap($idlot, $iduser)
-    {
-        $datauser = User::find($iduser);
-        $params = [
-            'transaction_details' => [
-                'order_id' => 'Bid-Join-' . rand(100000000, 999999999),
-                'gross_amount' => 50000,
-            ],
-            'customer_details' => [
-                'first_name' => $datauser->name,
-                'last_name' => $datauser->name,
-                'email' => $datauser->email,
-            ],
-        ];
-        $this->initPaymentGateway();
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-        $this->emit('snap', $snapToken, $idlot, $iduser);
-    }
-
     public function inputPenawaran()
     {
         $penawaranuser = str_replace('.', '', $this->penawaranuser);
@@ -92,6 +73,17 @@ class BidItemView extends Component
         ]);
     }
 
+    // additional func
+    public function timeRemaining($datenow, $datecompare)
+    {
+        $now = new DateTime();
+        $future_date = new DateTime('2011-05-11 12:00:00');
+
+        $interval = $future_date->diff($now);
+
+        echo $interval->format("%a days, %h hours, %i minutes, %s seconds");
+    }
+
     public function incrementPenawaran()
     {
         $penawaranuser = str_replace('.', '', $this->penawaranuser);
@@ -106,5 +98,25 @@ class BidItemView extends Component
             $penawaranuser -= 10000;
             $this->penawaranuser = number_format($penawaranuser, 0, ',', '.');
         }
+    }
+
+    public function callSnap($idlot, $iduser)
+    {
+        $datauser = User::find($iduser);
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'Bid-Join-' . rand(100000000, 999999999),
+                'gross_amount' => 50000,
+            ],
+            'customer_details' => [
+                'first_name' => $datauser->name,
+                'last_name' => $datauser->name,
+                'email' => $datauser->email,
+            ],
+        ];
+        $this->initPaymentGateway();
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        $this->emit('snap', $snapToken, $idlot, $iduser);
     }
 }

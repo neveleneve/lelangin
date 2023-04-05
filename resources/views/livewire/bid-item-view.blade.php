@@ -21,6 +21,9 @@
                     }
                 });
             });
+            setInterval(() => {
+                $("#sisawaktu").text("new text");
+            }, 1000);
         </script>
     @endpush
     @push('css')
@@ -165,6 +168,16 @@
                                                 </td>
                                                 <td>
                                                     <h6>
+                                                        {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h6 class="fw-bold">Sisa Waktu</h6>
+                                                </td>
+                                                <td>
+                                                    <h6 id="sisawaktu">
                                                         {{ $this->dateConvertInt($datalelang->waktu_selesai) }}
                                                     </h6>
                                                 </td>
